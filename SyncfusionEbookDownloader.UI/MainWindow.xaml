@@ -4,29 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncfusionEbookDownloader.UI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewModel="clr-namespace:SyncfusionEbookDownloader.UI.ViewModel"
+        xmlns:model="clr-namespace:SyncfusionEbookDownloader.UI.Model"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Title="MainWindow" Height="700" Width="1000"
         DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.MainWindowViewModelStatic}}">
+    
+    <Window.Resources>
+        <Color x:Key="mainBlue">#FF145E9D</Color>
+        <SolidColorBrush x:Key="mainBlueBrush" Color="{StaticResource mainBlue}" />
+
+        <DataTemplate DataType="{x:Type model:SyncfusionEbook}">
+            <Image Source="{Binding Image}" Height="160" />
+        </DataTemplate>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button Content="Fetch" Command="{Binding FetchEbooksCommand}" />
-        <ScrollViewer Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding EbooksCollection}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Image Source="{Binding Image}" Height="160" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ListBox ItemsSource="{Binding EbooksCollection}" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Margin="2">
+                            <StackPanel Width="180" Height="310">
+                                <Image Source="{Binding Image}" Width="180" />
+                                <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxHeight="35" Margin="6"/>
+                                <TextBlock Text="{Binding Author}" FontSize="12" FontWeight="Regular" Margin="6,0,6,6" />
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </ScrollViewer>
     </Grid>
+
 </Window>
